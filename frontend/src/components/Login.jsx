@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:1400/api/user/login",
+        "https://fullstack-todo-app-69m3.onrender.com/api/user/login",
         { email, password },
         {
           withCredentials: true,

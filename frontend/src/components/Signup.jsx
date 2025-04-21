@@ -14,7 +14,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:1400/api/user/reg",
+        "https://fullstack-todo-app-69m3.onrender.com/api/user/reg",
         { username, email, password },
         {
           withCredentials: true,
