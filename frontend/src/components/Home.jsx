@@ -9,6 +9,8 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [newTodo, setNewTodo] = useState("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchTodos = async () => {
       try {
@@ -24,7 +26,13 @@ const Home = () => {
         );
         setLoading(false);
         console.log(response.data.getAllTodo);
-        setTodos(response.data.getAllTodo);
+        // setTodos(response.data.getAllTodo);
+        setTodos(
+          Array.isArray(response.data.getAllTodo)
+            ? response.data.getAllTodo
+            : []
+        );
+
         setError(null);
         setLoading(false);
       } catch (error) {
@@ -86,7 +94,7 @@ const Home = () => {
       setError("Failed to delete todo");
     }
   };
-  const navigate = useNavigate();
+
   const logout = async () => {
     try {
       await axios.get(
@@ -103,7 +111,11 @@ const Home = () => {
     }
   };
 
-  const remainingTodos = todos.filter((todo) => !todo.completed).length;
+  // const remainingTodos = todos.filter((todo) => !todo.completed).length;
+  const remainingTodos = Array.isArray(todos)
+    ? todos.filter((todo) => !todo.completed).length
+    : 0;
+
   return (
     <>
       <div className=" my-10 bg-gray-100 max-w-lg lg:max-w-xl rounded-lg shadow-lg mx-8 sm:mx-auto p-6">
