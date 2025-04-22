@@ -66,7 +66,7 @@ export const login = async (req, res) => {
     const token = await generateTokenAndSaveInCookies(user._id, res);
     return res
       .status(200)
-      .json({ message: "User logged in successfully", user });
+      .json({ message: "User logged in successfully", user, token });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error login user" });
