@@ -103,7 +103,8 @@ const Home = ({ setToken }) => {
     }
   };
 
-  const remainingTodos = todos.filter((todo) => !todo.completed).length;
+  const remainingTodos = todos?.filter((todo) => !todo.completed).length || 0;
+
 
   
   return (
