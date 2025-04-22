@@ -3,13 +3,11 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ setToken }) => {
   const [todos, setTodos] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [newTodo, setNewTodo] = useState("");
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -26,13 +24,7 @@ const Home = () => {
         );
         setLoading(false);
         console.log(response.data.getAllTodo);
-        // setTodos(response.data.getAllTodo);
-        setTodos(
-          Array.isArray(response.data.getAllTodo)
-            ? response.data.getAllTodo
-            : []
-        );
-
+        setTodos(response.data.getAllTodo);
         setError(null);
         setLoading(false);
       } catch (error) {
@@ -94,7 +86,7 @@ const Home = () => {
       setError("Failed to delete todo");
     }
   };
-
+  const navigate = useNavigate();
   const logout = async () => {
     try {
       await axios.get(
@@ -104,18 +96,16 @@ const Home = () => {
         }
       );
       toast.success("User Logout Successfully");
-      localStorage.removeItem("jwt");
+      setToken(null); // Update state to trigger redirect
       navigate("/login");
     } catch (error) {
       toast.error("Error logging out");
     }
   };
 
-  // const remainingTodos = todos.filter((todo) => !todo.completed).length;
-  const remainingTodos = Array.isArray(todos)
-    ? todos.filter((todo) => !todo.completed).length
-    : 0;
+  const remainingTodos = todos.filter((todo) => !todo.completed).length;
 
+  
   return (
     <>
       <div className=" my-10 bg-gray-100 max-w-lg lg:max-w-xl rounded-lg shadow-lg mx-8 sm:mx-auto p-6">

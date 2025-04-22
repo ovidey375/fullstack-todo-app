@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
+  const navigateTo = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
+      const res = await axios.post(
         "https://fullstack-todo-app-69m3.onrender.com/api/user/login",
         { email, password },
         {
@@ -19,10 +19,15 @@ const Login = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log(data);
-      toast.success(data.message || "User loggedin successfully");
-      localStorage.setItem("jwt", data.token);
-      navigate("/");
+      console.log(res.data);
+      const token = res.data.token;
+      if (token) {
+        setToken(token); // Update App state (also stores in localStorage + redirects)
+        toast.success("Login successful");
+        navigateTo("/");
+      } else {
+        toast.error("Token not received");
+      }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.errors || "User registration failed");
@@ -58,7 +63,7 @@ const Login = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Type Username"
+                  placeholder="Type Password"
                 />
               </div>
 
